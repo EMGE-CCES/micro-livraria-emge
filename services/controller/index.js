@@ -53,6 +53,28 @@ app.get('/product/:id', (req, res, next) => {
     });
 });
 
+app.post('/product/buy/:id/:quantity', (req, res, next) => {
+    inventory.BuyProduct({ id: req.params.id, quantity: req.params.quantity }, (err, product) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send({ error: 'something failed :(' });
+        } else {
+            res.json(product);
+        }
+    });
+});
+
+app.post('/product/add/:id/:quantity', (req, res, next) => {
+    inventory.AddProduct({ id: req.params.id, quantity: req.params.quantity }, (err, product) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send({ error: 'something failed :(' });
+        } else {
+            res.json(product);
+        }
+    });
+});
+
 /**
  * Inicia o router
  */
