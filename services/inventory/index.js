@@ -1,6 +1,8 @@
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 const products = require('./products.json');
+const fs = require('fs');
+const path = require('path');
 
 const packageDefinition = protoLoader.loadSync('proto/inventory.proto', {
     keepCase: true,
@@ -25,6 +27,20 @@ server.addService(inventoryProto.InventoryService.service, {
             null,
             products.find((product) => product.id == payload.request.id)
         );
+    },
+    BuyProduct: (Product, callback) => {
+        const products = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'products.json')));
+        const index = products.findIndex(productJson => productJson.id == Product.request.id);
+        products[index].quantity -= Product.request.quantity;
+        fs.writeFileSync(path.resolve(__dirname, 'products.json'), JSON.stringify(products, null, 2));
+        return callback(null, products);
+    },
+    AddProduct: (Product, callback) => {
+        const products = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'products.json')));
+        const index = products.findIndex(productJson => productJson.id == Product.request.id);
+        products[index].quantity += Product.request.quantity;
+        fs.writeFileSync(path.resolve(__dirname, 'products.json'), JSON.stringify(products, null, 2));
+        return callback(null, products);
     },
 });
 
