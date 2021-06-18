@@ -19,14 +19,28 @@ body {
     line-height: 1.5;
 }
 
+
 .features {
     padding: 5rem 0;
 }
+
 
 .box.cta {
     border-radius: 0;
     border-left: none;
     border-right: none;
+    display: flex;
+}
+
+
+input[type=text]{
+    width: 25%;
+    margin: 0px 0px 0px 10px;
+    transition: width 0.4s ease-in-out;
+}
+input[type=text]:focus {
+    border: 3px solid #555;
+    width: 50%;
 }
 
 .card-image > .fa {
