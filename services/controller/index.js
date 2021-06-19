@@ -16,6 +16,7 @@ app.get('/products', (req, res, next) => {
             res.status(500).send({ error: 'something failed :(' });
         } else {
             res.json(data.products);
+            
         }
     });
 });
@@ -52,6 +53,7 @@ app.get('/product/:id', (req, res, next) => {
         }
     });
 });
+
 
 /**
  * Inicia o router

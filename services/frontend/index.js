@@ -16,7 +16,7 @@ function newBook(book) {
                 <div class="content book" data-id="${book.id}">
                     <div class="book-meta">
                         <p class="is-size-4">R$${book.price.toFixed(2)}</p>
-                        <p class="is-size-6">Disponível em estoque: 5</p>
+                        <p class="is-size-6">Disponível em estoque: ${book.quantidade}</p>
                         <h4 class="is-size-3 title">${book.name}</h4>
                         <p class="subtitle">${book.author}</p>
                     </div>
@@ -28,10 +28,16 @@ function newBook(book) {
                             <a class="button button-shipping is-info" data-id="${book.id}"> Calcular Frete </a>
                         </div>
                     </div>
-                    <button class="button button-buy is-success is-fullwidth">Comprar</button>
+                    <button class="button button-buy is-success is-fullwidth"data id = " ${book.id} ">Comprar</button>
                 </div>
             </div>
         </div>`;
+
+        if (book.quantidade == 0 ){
+            $(document).ready(()=> {
+                $(`#${book.id}`).prop('disabled', true);
+            })
+        }
     return div;
 }
 
@@ -61,11 +67,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 return data.json();
             }
             throw data.statusText;
+            console.log(data)
         })
         .then((data) => {
             if (data) {
                 data.forEach((book) => {
                     books.appendChild(newBook(book));
+                });
+
+                document.querySelectorAll('.lname').forEach((btn) => {
+                    btn.addEventListener('click', (e) => {
+                       if($_POST){
+                           console.log('post check')
+                       }
+                    });
                 });
 
                 document.querySelectorAll('.button-shipping').forEach((btn) => {
@@ -78,6 +93,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 document.querySelectorAll('.button-buy').forEach((btn) => {
                     btn.addEventListener('click', (e) => {
+                        const productId = e.target.getAttribute('data-id');
+                        fetch(`http://localhost:3000/product/buy/${productId}/1`, {
+                            method: 'POST'
+                        });
                         swal('Compra de livro', 'Sua compra foi realizada com sucesso', 'success');
                     });
                 });
